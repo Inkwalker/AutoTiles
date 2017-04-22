@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3b8fd16a10f03149ae40192bbd7696f, type: 3}
+  m_Name: FieldFanceWallBrush
+  m_EditorClassIdentifier: 
+  tiles:
+  - prefabs:
+    - prefab: {fileID: 1000011705683184, guid: 41748979cb7ae2c4987419b5b755d0ff, type: 2}
+      weight: 1
+    rule: 0000000002000000000000000100000001000000000000000200000000000000
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+  - prefabs:
+    - prefab: {fileID: 1000011705683184, guid: 41748979cb7ae2c4987419b5b755d0ff, type: 2}
+      weight: 1
+    rule: 0000000001000000000000000200000002000000000000000100000000000000
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  size: 1
+  group: fance
+  interactGroups:
+  - fance

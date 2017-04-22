@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3b8fd16a10f03149ae40192bbd7696f, type: 3}
+  m_Name: RoadBrush
+  m_EditorClassIdentifier: 
+  tiles:
+  - prefabs:
+    - prefab: {fileID: 1733031179960640, guid: a85159e2ed4f3c64092dfcfb6871ddd1, type: 2}
+      weight: 1
+    rule: 0000000002000000000000000100000001000000000000000200000000000000
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+  - prefabs:
+    - prefab: {fileID: 1733031179960640, guid: a85159e2ed4f3c64092dfcfb6871ddd1, type: 2}
+      weight: 1
+    rule: 0000000001000000000000000200000002000000000000000100000000000000
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  - prefabs:
+    - prefab: {fileID: 1771997026850542, guid: 27edcdfaa42c50640aa1ba980c7da7cd, type: 2}
+      weight: 1
+    rule: 0000000001000000000000000100000002000000000000000200000000000000
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+  - prefabs:
+    - prefab: {fileID: 1771997026850542, guid: 27edcdfaa42c50640aa1ba980c7da7cd, type: 2}
+      weight: 1
+    rule: 0000000002000000000000000100000002000000000000000100000000000000
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  - prefabs:
+    - prefab: {fileID: 1771997026850542, guid: 27edcdfaa42c50640aa1ba980c7da7cd, type: 2}
+      weight: 1
+    rule: 0000000002000000000000000200000001000000000000000100000000000000
+    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  - prefabs:
+    - prefab: {fileID: 1771997026850542, guid: 27edcdfaa42c50640aa1ba980c7da7cd, type: 2}
+      weight: 1
+    rule: 0000000001000000000000000200000001000000000000000200000000000000
+    rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
+  - prefabs:
+    - prefab: {fileID: 1066240046703064, guid: e9a36e419e2638d4f8509785a9a0713f, type: 2}
+      weight: 1
+    rule: 0000000001000000000000000200000002000000000000000200000000000000
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+  - prefabs:
+    - prefab: {fileID: 1066240046703064, guid: e9a36e419e2638d4f8509785a9a0713f, type: 2}
+      weight: 1
+    rule: 0000000002000000000000000100000002000000000000000200000000000000
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  - prefabs:
+    - prefab: {fileID: 1066240046703064, guid: e9a36e419e2638d4f8509785a9a0713f, type: 2}
+      weight: 1
+    rule: 0000000002000000000000000200000002000000000000000100000000000000
+    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  - prefabs:
+    - prefab: {fileID: 1066240046703064, guid: e9a36e419e2638d4f8509785a9a0713f, type: 2}
+      weight: 1
+    rule: 0000000002000000000000000200000001000000000000000200000000000000
+    rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
+  - prefabs:
+    - prefab: {fileID: 1157263913909546, guid: 6d70877618a52564f952c8dd4cc7c1a1, type: 2}
+      weight: 1
+    rule: 0000000002000000000000000100000001000000000000000100000000000000
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+  - prefabs:
+    - prefab: {fileID: 1157263913909546, guid: 6d70877618a52564f952c8dd4cc7c1a1, type: 2}
+      weight: 1
+    rule: 0000000001000000000000000200000001000000000000000100000000000000
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  - prefabs:
+    - prefab: {fileID: 1157263913909546, guid: 6d70877618a52564f952c8dd4cc7c1a1, type: 2}
+      weight: 1
+    rule: 0000000001000000000000000100000001000000000000000200000000000000
+    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  - prefabs:
+    - prefab: {fileID: 1157263913909546, guid: 6d70877618a52564f952c8dd4cc7c1a1, type: 2}
+      weight: 1
+    rule: 0000000001000000000000000100000002000000000000000100000000000000
+    rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
+  size: 4
+  group: road
+  interactGroups:
+  - road
