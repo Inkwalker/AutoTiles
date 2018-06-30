@@ -26,7 +26,7 @@ namespace Autotiles
             this.brush = brush;
 
             previewRenderUtility = new PreviewRenderUtility();
-            previewRenderUtility.m_Camera.farClipPlane = 200;
+            previewRenderUtility.camera.farClipPlane = 200;
 
             drag = new Vector2(0, -60f);
             cameraDistance = brush.size * 12f;
@@ -71,10 +71,10 @@ namespace Autotiles
                 previewRenderUtility.DrawMesh(mesh, trs, mat, 0);
             }
 
-            previewRenderUtility.m_Camera.transform.position = Vector3.zero;
-            previewRenderUtility.m_Camera.transform.rotation = Quaternion.Euler(new Vector3(-drag.y, -drag.x, 0));
-            previewRenderUtility.m_Camera.transform.position = previewRenderUtility.m_Camera.transform.forward * -cameraDistance;
-            previewRenderUtility.m_Camera.Render();
+            previewRenderUtility.camera.transform.position = Vector3.zero;
+            previewRenderUtility.camera.transform.rotation = Quaternion.Euler(new Vector3(-drag.y, -drag.x, 0));
+            previewRenderUtility.camera.transform.position = previewRenderUtility.camera.transform.forward * -cameraDistance;
+            previewRenderUtility.camera.Render();
 
             previewRenderUtility.EndAndDrawPreview(r);
         }
