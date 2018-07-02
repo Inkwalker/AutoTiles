@@ -91,7 +91,13 @@ namespace Autotiles
         private void UpdateInstance(int x, int y)
         {
             int index = TileIndex(x, y);
-            DestroyImmediate(instances[index]);
+            var obj = instances[index];
+
+            if (obj != null)
+            {
+                DestroyImmediate(obj);
+            }
+
             if (tiles[index] != null)
             {
                 instances[index] = CreateInstance(tiles[index], x, y);
@@ -105,7 +111,12 @@ namespace Autotiles
                 for (int y = 0; y < Height; y++)
                 {
                     int index = TileIndex(x, y);
-                    DestroyImmediate(instances[index]);
+                    var obj = instances[index];
+
+                    if (obj != null)
+                    {
+                        DestroyImmediate(instances[index]);
+                    }
 
                     tiles[index] = null;
                     instances[index] = null;
@@ -148,14 +159,24 @@ namespace Autotiles
             {
                 for (int y = 0; y < this.height; y++)
                 {
-                    DestroyImmediate(instances[TileIndex(x, y)]);
+                    var obj = instances[TileIndex(x, y)];
+
+                    if (obj != null)
+                    {
+                        DestroyImmediate(obj);
+                    }
                 }
             }
             for (int y = height; y < this.height; y++)
             {
                 for (int x = 0; x < this.width; x++)
                 {
-                    DestroyImmediate(instances[TileIndex(x, y)]);
+                    var obj = instances[TileIndex(x, y)];
+
+                    if (obj != null)
+                    {
+                        DestroyImmediate(obj);
+                    }
                 }
             }
 

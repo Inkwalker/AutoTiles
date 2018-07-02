@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using System.Collections.Generic;
 
 namespace Autotiles
 {
@@ -25,11 +26,14 @@ namespace Autotiles
             size = new Vector2(tilemap.Width, tilemap.Height);
 
             EditorApplication.update += Update;
+
+            Undo.undoRedoPerformed += OnUndoRedo;
         }
 
         void OnDisable()
         {
             EditorApplication.update -= Update;
+            Undo.undoRedoPerformed -= OnUndoRedo;
 
             TilemapEditorUtils.SetSelectionState(tilemap.gameObject, EditorSelectedRenderState.Highlight);
         }
@@ -42,9 +46,7 @@ namespace Autotiles
             float tileSize = EditorGUILayout.FloatField("Tile size", tilemap.TileSize);
             if (EditorGUI.EndChangeCheck())
             {
-                tileSize = tileSize < 0.1f ? 0.1f : tileSize;
-                tilemap.ChangeTileSize(tileSize);
-                MarkSceneDirty();
+                ChangeTilesSize(tileSize);
             }
 
             EditorGUILayout.BeginHorizontal();
@@ -53,11 +55,8 @@ namespace Autotiles
             {
                 if (mode == EditorMode.Resize)
                 {
-                    tilemap.Resize((int)size.x, (int)size.y);
-                    MarkSceneDirty();
+                    ResizeTilemap((int)size.x, (int)size.y);
                     mode = EditorMode.View;
-
-                    TilemapEditorUtils.SetSelectionState(tilemap.gameObject, EditorSelectedRenderState.Highlight);
                 }
                 else
                 {
@@ -71,14 +70,13 @@ namespace Autotiles
 
             if (GUILayout.Button(mode == EditorMode.Edit ? "Exit edit mode" : "Edit"))
             {
-                mode = mode == EditorMode.Edit ? EditorMode.View : EditorMode.Edit;
-
-                TilemapEditorUtils.SetSelectionState(tilemap.gameObject, mode == EditorMode.Edit ? EditorSelectedRenderState.Hidden : EditorSelectedRenderState.Highlight);
+                ToggleEditMode();
             }
 
             if (GUILayout.Button("Update"))
             {
                 tilemap.Rebuild();
+                TilemapEditorUtils.SetSelectionState(tilemap.gameObject, EditorSelectedRenderState.Hidden);
             }
 
         }
@@ -103,11 +101,6 @@ namespace Autotiles
 
         private void Update()
         {
-            //if (tilemap.editMode)
-            //{
-            //    //this will lock selection
-            //    Selection.activeObject = target;
-            //}
         }
 
         private void ToolbarWindow(int id)
@@ -127,6 +120,7 @@ namespace Autotiles
             var brushRect = new Rect(contentRec.x, previewRect.yMax + 5, contentRec.width, EditorGUIUtility.singleLineHeight);
             var eraseRect = new Rect(contentRec.x, brushRect.yMax + 5, contentRec.width, EditorGUIUtility.singleLineHeight);
             var pickRect = new Rect(contentRec.x, eraseRect.yMax + 5, contentRec.width, EditorGUIUtility.singleLineHeight);
+            var doneButtonRect = new Rect(contentRec.x, pickRect.yMax + 5 + EditorGUIUtility.singleLineHeight, contentRec.width, EditorGUIUtility.singleLineHeight);
             var cursorPosRect = new Rect(contentRec.x, contentRec.yMax - EditorGUIUtility.singleLineHeight, contentRec.width, EditorGUIUtility.singleLineHeight);
             var clearButtonRect = new Rect(contentRec.x, cursorPosRect.y - EditorGUIUtility.singleLineHeight - 5, contentRec.width, EditorGUIUtility.singleLineHeight);
 
@@ -203,11 +197,16 @@ namespace Autotiles
                 }
             }
 
+            if (GUI.Button(doneButtonRect, "Done"))
+            {
+                ToggleEditMode();
+            }
+
             if (GUI.Button(clearButtonRect, "Clear"))
             {
                 if (EditorUtility.DisplayDialog("Clear tilemap", "Clear the tilemap?", "Yes, clear", "No, cancel"))
-                { 
-                    tilemap.Clear();
+                {
+                    ClearTilemap();
                 }
             }
 
@@ -336,10 +335,7 @@ namespace Autotiles
                 {
                     if (currentTool == Tool.Erase)
                     {
-                        tilemap.SetTile(x, y, null);
-                        SetSelectionState(new Rect(x - 1, y - 1, 3, 3), EditorSelectedRenderState.Hidden);
-
-                        MarkSceneDirty();
+                        EraseTile(x, y);
                     }
 
                     if (currentTool == Tool.Pick)
@@ -349,14 +345,7 @@ namespace Autotiles
 
                     if (currentTool == Tool.Brush)
                     {
-                        if (tilemap.GetTile(x, y) != activeBrush)
-                        {
-                            tilemap.SetTile(x, y, activeBrush);
-                            SetSelectionState(new Rect(x - 1, y - 1, 3, 3), EditorSelectedRenderState.Hidden);
-                            SetSelectionState(new Rect(x, y, 1, 1), EditorSelectedRenderState.Highlight);
-
-                            MarkSceneDirty();
-                        }
+                        DrawTile(x, y, activeBrush);
                     }
                     e.Use();
                 }
@@ -370,6 +359,68 @@ namespace Autotiles
                 selectionRect = null;
             }
         }
+
+        private void ToggleEditMode()
+        {
+            mode = mode == EditorMode.Edit ? EditorMode.View : EditorMode.Edit;
+            TilemapEditorUtils.SetSelectionState(tilemap.gameObject, mode == EditorMode.Edit ? EditorSelectedRenderState.Hidden : EditorSelectedRenderState.Highlight);
+
+            Repaint();
+        }
+
+        #region Tilemap Operations
+
+        private void DrawTile(int x, int y, Brush brush)
+        {
+            if (tilemap.GetTile(x, y) != brush)
+            {
+                Undo.RecordObject(tilemap, "Draw Tile");
+
+                tilemap.SetTile(x, y, brush);
+                SetSelectionState(new Rect(x - 1, y - 1, 3, 3), EditorSelectedRenderState.Hidden);
+                SetSelectionState(new Rect(x, y, 1, 1), EditorSelectedRenderState.Highlight);
+
+                MarkSceneDirty();
+            }
+        }
+
+        private void EraseTile(int x, int y)
+        {
+            Undo.RecordObject(tilemap, "Erase Tile");
+
+            tilemap.SetTile(x, y, null);
+            SetSelectionState(new Rect(x - 1, y - 1, 3, 3), EditorSelectedRenderState.Hidden);
+
+            MarkSceneDirty();
+        }
+
+        private void ChangeTilesSize(float size)
+        {
+            Undo.RecordObject(tilemap, "Change Tile Size");
+
+            size = size < 0.1f ? 0.1f : size;
+            tilemap.ChangeTileSize(size);
+            MarkSceneDirty();
+        }
+
+        private void ResizeTilemap(int sizeX, int sizeY)
+        {
+            Undo.RecordObject(tilemap, "Resize Tilemap");
+
+            tilemap.Resize(sizeX, sizeY);
+            MarkSceneDirty();
+
+            TilemapEditorUtils.SetSelectionState(tilemap.gameObject, EditorSelectedRenderState.Highlight);
+        }
+
+        private void ClearTilemap()
+        {
+            Undo.RecordObject(tilemap, "Clear Tilemap");
+
+            tilemap.Clear();
+        }
+
+        #endregion
 
         private void OnSelectionChanged(Rect? newSelection)
         {
@@ -431,6 +482,28 @@ namespace Autotiles
             }
 
             return null;
+        }
+
+        private void OnUndoRedo()
+        {
+            //Clear all children. We can't update instances referances after undo/redo operations.
+            //The only way to fix this is to destroy and recreate every tile.
+
+            List<GameObject> remove = new List<GameObject>(tilemap.transform.childCount);
+            for (int i = 0; i < tilemap.transform.childCount; i++)
+            {
+                remove.Add(tilemap.transform.GetChild(i).gameObject);
+            }
+
+            for (int i = 0; i < remove.Count; i++)
+            {
+                DestroyImmediate(remove[i]);
+            }
+
+            tilemap.Rebuild();
+
+            selectionRect = null;
+            TilemapEditorUtils.SetSelectionState(tilemap.gameObject, EditorSelectedRenderState.Hidden);
         }
 
         private enum EditorMode

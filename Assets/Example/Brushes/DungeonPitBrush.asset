@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3b8fd16a10f03149ae40192bbd7696f, type: 3}
+  m_Name: DungeonPitBrush
+  m_EditorClassIdentifier: 
+  tiles:
+  - prefabs:
+    - prefab: {fileID: 1662631298160024, guid: d032721754be7be4795333b662a1a496, type: 2}
+      weight: 80
+    rule: 0000000000000000000000000000000000000000000000000000000000000000
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+  size: 1
+  group: floor
+  interactGroups:
+  - floor
