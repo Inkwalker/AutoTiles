@@ -3,28 +3,28 @@
 namespace Autotiles
 {
     [SelectionBase]
-    public class Tilemap : MonoBehaviour
+    public class Tilemap3D : MonoBehaviour
     {
         private const int DefaultSize = 10;
 
-        [SerializeField, HideInInspector]
+        [SerializeField]
         private float tileSize = 1;
 
-        [SerializeField, HideInInspector]
+        [SerializeField]
         private int width = DefaultSize;
-        [SerializeField, HideInInspector]
+        [SerializeField]
         private int height = DefaultSize;
 
-        [SerializeField, HideInInspector]
-        private Brush[] tiles = new Brush[DefaultSize * DefaultSize];
-        [SerializeField, HideInInspector]
+        [SerializeField]
+        private Brush3D[] tiles = new Brush3D[DefaultSize * DefaultSize];
+        [SerializeField]
         private GameObject[] instances = new GameObject[DefaultSize * DefaultSize];
 
         public int Width { get { return width; } }
         public int Height { get { return height; } }
         public float TileSize { get { return tileSize; } }
 
-        public Brush GetTile(int x, int y)
+        public Brush3D GetTile(int x, int y)
         {
             if (x >= 0 && x < Width && y >= 0 && y < Height)
             {
@@ -44,7 +44,7 @@ namespace Autotiles
             return null;
         }
 
-        public void SetTile(int x, int y, Brush brush)
+        public void SetTile(int x, int y, Brush3D brush)
         {
             tiles[TileIndex(x, y)] = brush;
 
@@ -70,7 +70,7 @@ namespace Autotiles
             return new Vector3(x * tileSize + tileSize * 0.5f, 0, y * tileSize + tileSize * 0.5f);
         }
 
-        private GameObject CreateInstance(Brush brush, int x, int y)
+        private GameObject CreateInstance(Brush3D brush, int x, int y)
         {
             if (brush == null) return null;
 
@@ -181,7 +181,7 @@ namespace Autotiles
             }
 
             //Create new arrays
-            var newTiles = new Brush[width * height];
+            var newTiles = new Brush3D[width * height];
             var newInstances = new GameObject[width * height];
 
             for (int x = 0; x < Mathf.Min(this.width, width); x++)

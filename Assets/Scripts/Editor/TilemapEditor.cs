@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 namespace Autotiles
 {
-    [CustomEditor(typeof(Tilemap))]
+    [CustomEditor(typeof(Tilemap3D))]
     public class TilemapEditor : Editor
     {
         private static Rect toolbarRect = new Rect(10, 30, 100, 500);
 
-        private static Brush activeBrush;
+        private static Brush3D activeBrush;
 
-        private Tilemap tilemap;
+        private Tilemap3D tilemap;
         private Vector2 size;
 
         private EditorMode mode;
@@ -22,7 +22,7 @@ namespace Autotiles
 
         void OnEnable()
         {
-            tilemap = target as Tilemap;
+            tilemap = target as Tilemap3D;
             size = new Vector2(tilemap.Width, tilemap.Height);
 
             EditorApplication.update += Update;
@@ -35,7 +35,8 @@ namespace Autotiles
             EditorApplication.update -= Update;
             Undo.undoRedoPerformed -= OnUndoRedo;
 
-            TilemapEditorUtils.SetSelectionState(tilemap.gameObject, EditorSelectedRenderState.Highlight);
+            if (tilemap != null)
+                TilemapEditorUtils.SetSelectionState(tilemap.gameObject, EditorSelectedRenderState.Highlight);
         }
 
         public override void OnInspectorGUI()
@@ -107,7 +108,7 @@ namespace Autotiles
         {
             if (Event.current.commandName == "ObjectSelectorUpdated")
             {
-                activeBrush = EditorGUIUtility.GetObjectPickerObject() as Brush;
+                activeBrush = EditorGUIUtility.GetObjectPickerObject() as Brush3D;
             }
 
             var contentRec = new Rect(
@@ -153,7 +154,7 @@ namespace Autotiles
 
             if (GUI.Button(previewRect, buttonContent))
             {
-                EditorGUIUtility.ShowObjectPicker<Brush>(activeBrush, false, "", EditorGUIUtility.GetControlID(FocusType.Passive));
+                EditorGUIUtility.ShowObjectPicker<Brush3D>(activeBrush, false, "", EditorGUIUtility.GetControlID(FocusType.Passive));
             }
 
             if (activeBrush != null)
@@ -370,7 +371,7 @@ namespace Autotiles
 
         #region Tilemap Operations
 
-        private void DrawTile(int x, int y, Brush brush)
+        private void DrawTile(int x, int y, Brush3D brush)
         {
             if (tilemap.GetTile(x, y) != brush)
             {
@@ -504,6 +505,13 @@ namespace Autotiles
 
             selectionRect = null;
             TilemapEditorUtils.SetSelectionState(tilemap.gameObject, EditorSelectedRenderState.Hidden);
+        }
+
+        [MenuItem("GameObject/3D Object/Tilemap 3D")]
+        static void CreateTilemap()
+        {
+            var obj = new GameObject("Tilemap");
+            obj.AddComponent<Tilemap3D>();
         }
 
         private enum EditorMode

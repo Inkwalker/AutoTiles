@@ -3,21 +3,21 @@ using System.Collections.Generic;
 
 namespace Autotiles
 {
-    [CreateAssetMenu]
-    public class Brush : ScriptableObject
+    [CreateAssetMenu(menuName = "Autotiles/Brush")]
+    public class Brush3D : ScriptableObject
     {
         public List<AutotileRule> tiles;
         public float size = 1;
         public string group = "Default";
         public string[] interactGroups = new string[] { "Default" };
 
-        public Brush()
+        public Brush3D()
         {
             tiles = new List<AutotileRule>();
             tiles.Add(new AutotileRule());
         }
 
-        public PrefabData GetPrefab(Tilemap tilemap, int x, int y)
+        public PrefabData GetPrefab(Tilemap3D tilemap, int x, int y)
         {
             int index = 0;
             bool[] neighbors = new bool[8];
@@ -28,7 +28,7 @@ namespace Autotiles
                 {
                     if (i == x && j == y) continue; //skip the middle tile
 
-                    Brush tile = tilemap.GetTile(i, j);
+                    Brush3D tile = tilemap.GetTile(i, j);
                     neighbors[index] = tile != null && CanInteractWith(tile);
 
                     index++;
@@ -101,7 +101,7 @@ namespace Autotiles
             return false;
         }
 
-        private bool CanInteractWith(Brush brush)
+        private bool CanInteractWith(Brush3D brush)
         {
             for (int i = 0; i < interactGroups.Length; i++)
             {

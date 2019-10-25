@@ -3,17 +3,18 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3b8fd16a10f03149ae40192bbd7696f, type: 3}
+  m_Script: {fileID: 11500000, guid: 470fc294b00ec6047839292db00239ef, type: 3}
   m_Name: FieldFancePostBrush
   m_EditorClassIdentifier: 
   tiles:
   - prefabs:
-    - prefab: {fileID: 1000010174256872, guid: 9042e1ee8e41ee64c9f866cc782d4774, type: 2}
+    - prefab: {fileID: 1000010174256872, guid: 9042e1ee8e41ee64c9f866cc782d4774, type: 3}
       weight: 1
     rule: 0000000000000000000000000000000000000000000000000000000000000000
     rotation: {x: 0, y: 0, z: 0, w: 1}

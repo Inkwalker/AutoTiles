@@ -4,7 +4,7 @@ using UnityEditorInternal;
 
 namespace Autotiles
 {
-    [CustomEditor(typeof(Brush))]
+    [CustomEditor(typeof(Brush3D))]
     public class BrushEditor : Editor
     {
         private ReorderableList list;
@@ -42,7 +42,7 @@ namespace Autotiles
                 l.serializedProperty.GetArrayElementAtIndex(l.count - 1).FindPropertyRelative("rule").arraySize = 8;
             };
 
-            brushPreview = new BrushEditorPreview(target as Brush);
+            brushPreview = new BrushEditorPreview(target as Brush3D);
         }
 
         void OnDisable()

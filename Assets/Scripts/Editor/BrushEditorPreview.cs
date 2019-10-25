@@ -14,14 +14,14 @@ namespace Autotiles
         private PreviewRenderUtility previewRenderUtility;
         private Vector2 drag;
         private float cameraDistance;
-        private Brush brush;
+        private Brush3D brush;
 
         private Mesh fillMesh;
         private Mesh emptyMesh;
         private Mesh undefMesh;
         private Material mat;
 
-        public BrushEditorPreview(Brush brush)
+        public BrushEditorPreview(Brush3D brush)
         {
             this.brush = brush;
 
@@ -57,13 +57,13 @@ namespace Autotiles
 
                 switch (brush.tiles[tileIndex].rule[i])
                 {
-                    case Brush.NeighborState.Empty:
+                    case Brush3D.NeighborState.Empty:
                         mesh = emptyMesh;
                         break;
-                    case Brush.NeighborState.Filled:
+                    case Brush3D.NeighborState.Filled:
                         mesh = fillMesh;
                         break;
-                    case Brush.NeighborState.Undefined:
+                    case Brush3D.NeighborState.Undefined:
                         mesh = undefMesh;
                         break;
                 }
@@ -85,7 +85,7 @@ namespace Autotiles
         }
 
         //preview uses 3 x 3 field
-        private bool[] GetNeighbors(int x, int y, Brush.NeighborState[] rule)
+        private bool[] GetNeighbors(int x, int y, Brush3D.NeighborState[] rule)
         {
             int index = 0;
             bool[] result = new bool[8];
@@ -107,7 +107,7 @@ namespace Autotiles
                         else
                         {
                             ruleIndex = ruleIndex > 4 ? ruleIndex - 1 : ruleIndex;
-                            result[index] = rule[ruleIndex] == Brush.NeighborState.Filled;
+                            result[index] = rule[ruleIndex] == Brush3D.NeighborState.Filled;
                         }
                     }
 
