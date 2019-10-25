@@ -24,6 +24,11 @@ namespace Autotiles
         public int Height { get { return height; } }
         public float TileSize { get { return tileSize; } }
 
+        public Brush3D GetTile(Vector2Int cell)
+        {
+            return GetTile(cell.x, cell.y);
+        }
+
         public Brush3D GetTile(int x, int y)
         {
             if (x >= 0 && x < Width && y >= 0 && y < Height)
@@ -34,6 +39,11 @@ namespace Autotiles
             return null;
         }
 
+        public GameObject GetTileInstance(Vector2Int cell)
+        {
+            return GetTileInstance(cell.x, cell.y);
+        }
+
         public GameObject GetTileInstance(int x, int y)
         {
             if (x >= 0 && x < Width && y >= 0 && y < Height)
@@ -42,6 +52,11 @@ namespace Autotiles
             }
 
             return null;
+        }
+
+        public void SetTile(Vector2Int cell, Brush3D brush)
+        {
+            SetTile(cell.x, cell.y, brush);
         }
 
         public void SetTile(int x, int y, Brush3D brush)
@@ -65,11 +80,6 @@ namespace Autotiles
             return x + y * Width;
         }
 
-        private Vector3 InstancePosition(int x, int y)
-        {
-            return new Vector3(x * tileSize + tileSize * 0.5f, 0, y * tileSize + tileSize * 0.5f);
-        }
-
         private GameObject CreateInstance(Brush3D brush, int x, int y)
         {
             if (brush == null) return null;
@@ -80,7 +90,7 @@ namespace Autotiles
                 GameObject instance = Instantiate<GameObject>(prefab.Prefab);
 
                 instance.transform.parent = transform;
-                instance.transform.localPosition = InstancePosition(x, y);
+                instance.transform.localPosition = CellToLocal(x, y);
                 instance.transform.localRotation = instance.transform.rotation * prefab.Rotation;
 
                 return instance;
@@ -146,7 +156,7 @@ namespace Autotiles
                     GameObject inst = instances[TileIndex(x, y)];
                     if (inst != null)
                     {
-                        inst.transform.localPosition = InstancePosition(x, y);
+                        inst.transform.localPosition = CellToLocal(x, y);
                     }
                 }
             }
@@ -154,7 +164,7 @@ namespace Autotiles
 
         public void Resize(int width, int height)
         {
-            //Destroy cutted instances
+            //Destroy cut instances
             for (int x = width; x < this.width; x++)
             {
                 for (int y = 0; y < this.height; y++)
@@ -212,5 +222,45 @@ namespace Autotiles
                 UpdateInstance(width - 1, y);
             }
         }
+
+        #region Coordinates
+
+        public Vector3 CellToLocal(int x, int y)
+        {
+            return new Vector3(x * tileSize + tileSize * 0.5f, 0, y * tileSize + tileSize * 0.5f);
+        }
+
+        public Vector3 CellToWorld(int x, int y)
+        {
+            var localPosition = CellToLocal(x, y);
+
+            return LocalToWorld(localPosition);
+        }
+
+        public Vector2Int LocalToCell(Vector3 localPosition)
+        {
+            int x = (int)(localPosition.x / TileSize);
+            int y = (int)(localPosition.z / TileSize);
+
+            return new Vector2Int(x, y);
+        }
+
+        public Vector2Int WorldToCell(Vector3 worldPosition)
+        {
+            var localPosition = WorldToLocal(worldPosition);
+            return LocalToCell(localPosition);
+        }
+
+        public Vector3 WorldToLocal(Vector3 worldPosition)
+        {
+            return transform.InverseTransformPoint(worldPosition);
+        }
+
+        public Vector3 LocalToWorld(Vector3 localPosition)
+        {
+            return transform.TransformPoint(localPosition);
+        }
+
+        #endregion
     }
 }

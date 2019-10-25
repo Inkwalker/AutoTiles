@@ -319,10 +319,9 @@ namespace Autotiles
 
             if (mousePos.HasValue)
             {
-                int x = (int)(mousePos.Value.x / tilemap.TileSize);
-                int y = (int)(mousePos.Value.z / tilemap.TileSize);
+                Vector2Int cell = tilemap.LocalToCell(mousePos.Value);
 
-                Rect newSelectionRect = new Rect(x, y, 1, 1);
+                Rect newSelectionRect = new Rect(cell.x, cell.y, 1, 1);
                 if (selectionRect.HasValue == false || selectionRect.Value != newSelectionRect)
                 {
                     OnSelectionChanged(newSelectionRect);
@@ -336,17 +335,17 @@ namespace Autotiles
                 {
                     if (currentTool == Tool.Erase)
                     {
-                        EraseTile(x, y);
+                        EraseTile(cell.x, cell.y);
                     }
 
                     if (currentTool == Tool.Pick)
                     {
-                        activeBrush = tilemap.GetTile(x, y);
+                        activeBrush = tilemap.GetTile(cell);
                     }
 
                     if (currentTool == Tool.Brush)
                     {
-                        DrawTile(x, y, activeBrush);
+                        DrawTile(cell.x, cell.y, activeBrush);
                     }
                     e.Use();
                 }
@@ -475,7 +474,7 @@ namespace Autotiles
 
             float distance;
             if (plane.Raycast(ray, out distance))
-                mousePos = tilemap.transform.InverseTransformPoint(ray.origin + (ray.direction.normalized * distance));
+                mousePos = tilemap.WorldToLocal(ray.origin + (ray.direction.normalized * distance));
 
             if (mousePos.x >= 0 && mousePos.x < tilemap.Width * tilemap.TileSize && mousePos.z >= 0 && mousePos.z < tilemap.Height * tilemap.TileSize)
             {
